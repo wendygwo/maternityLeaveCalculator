@@ -3,19 +3,17 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 class DateQuestion extends Component {
-  handleChange = date => {
-    // this.setState({
-    //   startDate: date
-    // });
-    console.log("date", date);
-  };
-
   render() {
-    const { key, question, date } = this.props;
+    const { question, date, name, onClick } = this.props;
+    // console.log("question", question);
     return (
-      <div key={key}>
+      <div>
         {question}
-        <DatePicker selected={date} onChange={this.handleChange} />
+        <DatePicker
+          selected={date}
+          onChange={date => onClick(date, name)}
+          placeholderText="Choose a date"
+        />
       </div>
     );
   }

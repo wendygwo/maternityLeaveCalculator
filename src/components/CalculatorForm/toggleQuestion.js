@@ -1,16 +1,24 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { ButtonGroup, Button } from "react-bootstrap";
 
 const ToggleQuestion = props => {
-  console.log("props", props);
+  const { question, answer, name, onClick } = props;
   return (
-    <div key={props.key}>
-      {props.question}
+    <div>
+      {question}
       <ButtonGroup>
-        <Button value="yes" active={props.answer === "yes"}>
+        <Button
+          value="yes"
+          active={answer === "yes"}
+          onClick={() => onClick("yes", name)}
+        >
           Yes
         </Button>{" "}
-        <Button value="no" active={props.answer === "no"}>
+        <Button
+          value="no"
+          active={answer === "no"}
+          onClick={() => onClick("no", name)}
+        >
           No
         </Button>
       </ButtonGroup>
