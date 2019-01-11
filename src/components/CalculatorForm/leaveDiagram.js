@@ -22,7 +22,8 @@ class LeaveDiagram extends Component {
       endOfStandardDisability = new Date(dueDate);
       endOfStandardDisability.setDate(
         endOfStandardDisability.getDate() +
-          STANDARD_NUM_DAYS_DISABILITY_AFTER_DUE_DATE
+          STANDARD_NUM_DAYS_DISABILITY_AFTER_DUE_DATE -
+          1
       );
 
       endOfWageReplacement = new Date(endOfStandardDisability);
