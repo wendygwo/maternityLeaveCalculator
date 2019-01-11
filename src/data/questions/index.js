@@ -53,16 +53,23 @@ export const babyAlreadyBornQuestions = [
     defaultAnswer: DEFAULT_DATE
   },
   {
+    question:
+      "When did you go out on disability? (Note: Put the delivery date if you didn't go on disability before giving birth)",
+    type: "date",
+    name: "babyBornQ1",
+    defaultAnswer: DEFAULT_DATE
+  },
+  {
     question: "What was your delivery method?",
     type: "dropdown",
-    name: "babyBornQ1",
+    name: "babyBornQ2",
     defaultAnswer: "vaginal"
   },
   {
     question:
       "Do you expect to have an extension on disability beyond the standard 6/8 weeks for vaginal/C-section delivery?",
     type: "toggle",
-    name: "babyBornQ2",
+    name: "babyBornQ3",
     defaultAnswer: "no"
   }
 ];
@@ -95,7 +102,7 @@ export const employerRelatedQuestions = [
     defaultAnswer: "no"
   },
   {
-    question: "Does your company have more than 50 employees?",
+    question: "Does your company have more than 5 employees?",
     type: "toggle",
     name: "employerQ4",
     defaultAnswer: "no"

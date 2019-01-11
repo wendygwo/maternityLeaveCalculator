@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import { isNull } from "lodash";
 import { allQuestions } from "../../data/questions";
 import ToggleQuestion from "./toggleQuestion";
 import DateQuestion from "./dateQuestion";
 import DropdownQuestion from "./dropdownQuestion";
+import LeaveDiagram from "./leaveDiagram";
 
 const DEFAULT_TOGGLE_ANSWER = "no";
 const DEFAULT_DATE = new Date();
@@ -17,8 +19,9 @@ class CalculatorForm extends Component {
       noBabyYetQ0: null,
       noBabyYetQ1: "vaginal",
       babyBornQ0: null,
-      babyBornQ1: "vaginal",
-      babyBornQ2: null,
+      babyBornQ1: null,
+      babyBornQ2: "vaginal",
+      babyBornQ3: null,
       employerQ0: null,
       employerQ1: null,
       employerQ2: null,
@@ -99,38 +102,68 @@ class CalculatorForm extends Component {
     );
   };
 
-  render() {
-    console.warn("render state", this.state);
-    // console.log("allQuestions", allQuestions);
-
+  restOfForm = () => {
     const {
-      firstQuestion,
       disabilityQuestions,
       noBabyYetQuestions,
       babyAlreadyBornQuestions,
       employerRelatedQuestions
     } = allQuestions;
     return (
-      <form>
-        <h3>Initial question</h3>
-        {firstQuestion.map(question => this.questionDisplay(question))}
+      <Fragment>
+        {this.state.hadBabyYetQ0 === "no" && (
+          <Fragment>
+            <h3>Disability questions</h3>
+            {disabilityQuestions.map(question =>
+              this.questionDisplay(question)
+            )}
+          </Fragment>
+        )}
 
-        <h3>Disability questions</h3>
-        {disabilityQuestions.map(question => this.questionDisplay(question))}
+        {this.state.hadBabyYetQ0 === "no" && (
+          <Fragment>
+            <h3>Delivery questions</h3>
+            {noBabyYetQuestions.map(question => this.questionDisplay(question))}
+          </Fragment>
+        )}
 
-        <h3>Delivery questions</h3>
-        {noBabyYetQuestions.map(question => this.questionDisplay(question))}
-
-        <h3>Birth questions</h3>
-        {babyAlreadyBornQuestions.map(question =>
-          this.questionDisplay(question)
+        {this.state.hadBabyYetQ0 === "yes" && (
+          <Fragment>
+            <h3>Birth questions</h3>
+            {babyAlreadyBornQuestions.map(question =>
+              this.questionDisplay(question)
+            )}
+          </Fragment>
         )}
 
         <h3>Employer questions</h3>
         {employerRelatedQuestions.map(question =>
           this.questionDisplay(question)
         )}
-      </form>
+      </Fragment>
+    );
+  };
+
+  render() {
+    console.warn("render state", this.state);
+    // console.log("allQuestions", allQuestions);
+
+    const { firstQuestion } = allQuestions;
+    return (
+      <Fragment>
+        <LeaveDiagram
+          dueDate={this.state.noBabyYetQ0}
+          numPostBirthDisabilityWeeks={
+            this.state.noBabyYetQ1 === "vaginal" ? 6 : 8
+          }
+        />
+        <form>
+          <h3>Initial question</h3>
+          {firstQuestion.map(question => this.questionDisplay(question))}
+
+          {this.state.hadBabyYetQ0 !== null && this.restOfForm()}
+        </form>
+      </Fragment>
     );
   }
 }
