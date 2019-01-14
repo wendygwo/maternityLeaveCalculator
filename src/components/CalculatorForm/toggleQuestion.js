@@ -5,21 +5,21 @@ const ToggleQuestion = props => {
   const { question, answer, name, onClick } = props;
   return (
     <div>
-      {question}
+      {question}{" "}
       <ButtonGroup>
-        <Button
-          value="yes"
-          active={answer === "yes"}
-          onClick={() => onClick("yes", name)}
-        >
-          Yes
-        </Button>{" "}
         <Button
           value="no"
           active={answer === "no"}
           onClick={() => onClick("no", name)}
         >
           No
+        </Button>
+        <Button
+          value="yes"
+          active={answer === "yes"}
+          onClick={() => onClick("yes", name)}
+        >
+          Yes
         </Button>
       </ButtonGroup>
     </div>

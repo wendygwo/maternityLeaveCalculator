@@ -28,39 +28,24 @@ class CalculatorForm extends Component {
       employerQ3: null,
       employerQ4: null
     };
-    // this.state = {
-    //   hadBabyYetQ0: DEFAULT_TOGGLE_ANSWER,
-    //   disabilityQ0: DEFAULT_TOGGLE_ANSWER,
-    //   disabilityQ1: DEFAULT_DATE,
-    //   noBabyYetQ0: DEFAULT_DATE,
-    //   noBabyYetQ1: "vaginal",
-    //   babyBornQ0: DEFAULT_DATE,
-    //   babyBornQ1: "vaginal",
-    //   babyBornQ2: DEFAULT_TOGGLE_ANSWER,
-    //   employerQ0: DEFAULT_TOGGLE_ANSWER,
-    //   employerQ1: DEFAULT_TOGGLE_ANSWER,
-    //   employerQ2: DEFAULT_TOGGLE_ANSWER,
-    //   employerQ3: DEFAULT_TOGGLE_ANSWER,
-    //   employerQ4: DEFAULT_TOGGLE_ANSWER
-    // };
   }
   onToggleClick = (value, name) => {
-    console.log("value", value);
-    console.log("name", name);
+    // console.log("value", value);
+    // console.log("name", name);
     this.setState({
       [name]: value
     });
   };
   onDateClick = (value, name) => {
-    console.log("value", value);
-    console.log("name", name);
+    // console.log("value", value);
+    // console.log("name", name);
     this.setState({
       [name]: value
     });
   };
   onDeliveryMethodClick = (value, name) => {
-    console.log("value", value);
-    console.log("name", name);
+    // console.log("value", value);
+    // console.log("name", name);
     this.setState({
       [name]: value
     });
@@ -113,17 +98,17 @@ class CalculatorForm extends Component {
       <Fragment>
         {this.state.hadBabyYetQ0 === "no" && (
           <Fragment>
-            <h3>Disability questions</h3>
-            {disabilityQuestions.map(question =>
-              this.questionDisplay(question)
-            )}
+            <h3>Delivery questions</h3>
+            {noBabyYetQuestions.map(question => this.questionDisplay(question))}
           </Fragment>
         )}
 
         {this.state.hadBabyYetQ0 === "no" && (
           <Fragment>
-            <h3>Delivery questions</h3>
-            {noBabyYetQuestions.map(question => this.questionDisplay(question))}
+            <h3>Disability questions</h3>
+            {disabilityQuestions.map(question =>
+              this.questionDisplay(question)
+            )}
           </Fragment>
         )}
 
@@ -144,6 +129,80 @@ class CalculatorForm extends Component {
     );
   };
 
+  getLeaveDiagram = () => {
+    const dueDate = this.state.noBabyYetQ0;
+    const numPostBirthDisabilityWeeks =
+      this.state.noBabyYetQ1 === "vaginal" ? 6 : 8;
+
+    const STANDARD_NUM_DAYS_DISABILITY_AFTER_DUE_DATE =
+      7 * numPostBirthDisabilityWeeks;
+    const MAX_NUM_DAYS_DISABILITY_BEFORE_DUE_DATE = 7 * 4;
+    const NUM_DAYS_WAGE_REPLACEMENT_AFTER_BIRTH = 7 * 6;
+    const NUM_DAYS_JOB_PROTECTION_AFTER_BIRTH = 7 * 12;
+
+    let firstDayOfDisability,
+      endOfStandardDisability,
+      endOfWageReplacement,
+      endOfJobProtection;
+    if (dueDate !== null) {
+      firstDayOfDisability = new Date(dueDate);
+
+      if (
+        this.state.disabilityQ1 === null ||
+        this.state.disabilityQ0 === "no"
+      ) {
+        console.log("disability start date - null", this.state.disabilityQ1);
+        firstDayOfDisability.setDate(
+          firstDayOfDisability.getDate() -
+            MAX_NUM_DAYS_DISABILITY_BEFORE_DUE_DATE
+        );
+      } else {
+        console.log("disability start date", this.state.disabilityQ1);
+        firstDayOfDisability = this.state.disabilityQ1;
+      }
+
+      endOfStandardDisability = new Date(dueDate);
+      endOfStandardDisability.setDate(
+        endOfStandardDisability.getDate() +
+          STANDARD_NUM_DAYS_DISABILITY_AFTER_DUE_DATE -
+          1
+      );
+
+      endOfWageReplacement = new Date(endOfStandardDisability);
+      endOfWageReplacement.setDate(
+        endOfWageReplacement.getDate() + NUM_DAYS_WAGE_REPLACEMENT_AFTER_BIRTH
+      );
+
+      endOfJobProtection = new Date(endOfStandardDisability);
+      endOfJobProtection.setDate(
+        endOfJobProtection.getDate() + NUM_DAYS_JOB_PROTECTION_AFTER_BIRTH
+      );
+
+      console.log("dueDate.toDateString()", dueDate.toDateString());
+      console.log("firstDayOfDisability", firstDayOfDisability.toDateString());
+      console.log(
+        "endOfStandardDisability",
+        endOfStandardDisability.toDateString()
+      );
+      console.log(
+        "numWeeksBetweenDisabilityStartAndDueDate",
+        Math.round(
+          ((dueDate - firstDayOfDisability) * 2) / (1000 * 60 * 60 * 24 * 7)
+        ) / 2
+      );
+    }
+
+    return (
+      <LeaveDiagram
+        firstDayOfDisability={firstDayOfDisability}
+        dueDate={dueDate}
+        endOfStandardDisability={endOfStandardDisability}
+        endOfWageReplacement={endOfWageReplacement}
+        endOfJobProtection={endOfJobProtection}
+      />
+    );
+  };
+
   render() {
     console.warn("render state", this.state);
     // console.log("allQuestions", allQuestions);
@@ -151,12 +210,7 @@ class CalculatorForm extends Component {
     const { firstQuestion } = allQuestions;
     return (
       <Fragment>
-        <LeaveDiagram
-          dueDate={this.state.noBabyYetQ0}
-          numPostBirthDisabilityWeeks={
-            this.state.noBabyYetQ1 === "vaginal" ? 6 : 8
-          }
-        />
+        {this.getLeaveDiagram()}
         <form>
           <h3>Initial question</h3>
           {firstQuestion.map(question => this.questionDisplay(question))}

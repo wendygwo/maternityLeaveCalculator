@@ -8,7 +8,7 @@ class DateQuestion extends Component {
     // console.log("question", question);
     return (
       <div>
-        {question}
+        {question}{" "}
         <DatePicker
           selected={date}
           onChange={date => onClick(date, name)}

@@ -7,8 +7,8 @@ class DropdownQuestion extends Component {
 
     return (
       <div>
-        {question}
-        <DropdownButton bsStyle="default" title={title}>
+        {question}{" "}
+        <DropdownButton bsStyle="default" title={title} id={title}>
           <MenuItem
             eventKey="1"
             active={deliveryMethod === "vaginal"}

@@ -2,56 +2,40 @@ import React, { Component, Fragment } from "react";
 
 class LeaveDiagram extends Component {
   render() {
-    const { dueDate, numPostBirthDisabilityWeeks } = this.props;
-    const STANDARD_NUM_DAYS_DISABILITY_AFTER_DUE_DATE =
-      7 * numPostBirthDisabilityWeeks;
-    const MAX_NUM_DAYS_DISABILITY_BEFORE_DUE_DATE = 7 * 4;
-    const NUM_DAYS_WAGE_REPLACEMENT_AFTER_BIRTH = 7 * 6;
-    const NUM_DAYS_JOB_PROTECTION_AFTER_BIRTH = 7 * 12;
-
-    let firstDayOfDisability,
+    const {
+      dueDate,
+      firstDayOfDisability,
       endOfStandardDisability,
       endOfWageReplacement,
-      endOfJobDescription;
+      endOfJobProtection
+    } = this.props;
+
+    let disabilityPreBirthDisplayBlocks;
+
     if (dueDate !== null) {
-      firstDayOfDisability = new Date(dueDate);
-      firstDayOfDisability.setDate(
-        firstDayOfDisability.getDate() - MAX_NUM_DAYS_DISABILITY_BEFORE_DUE_DATE
-      );
+      const numWeeksDisability =
+        Math.round(
+          ((dueDate - firstDayOfDisability) * 2) / (1000 * 60 * 60 * 24 * 7)
+        ) / 2; // TODO - figure out how to represent half a week
 
-      endOfStandardDisability = new Date(dueDate);
-      endOfStandardDisability.setDate(
-        endOfStandardDisability.getDate() +
-          STANDARD_NUM_DAYS_DISABILITY_AFTER_DUE_DATE -
-          1
-      );
+      console.log("numWeeksDisability", numWeeksDisability);
 
-      endOfWageReplacement = new Date(endOfStandardDisability);
-      endOfWageReplacement.setDate(
-        endOfWageReplacement.getDate() + NUM_DAYS_WAGE_REPLACEMENT_AFTER_BIRTH
-      );
+      const disabilityBlocks = Array.from(new Array(numWeeksDisability).keys());
 
-      endOfJobDescription = new Date(endOfStandardDisability);
-      endOfJobDescription.setDate(
-        endOfJobDescription.getDate() + NUM_DAYS_JOB_PROTECTION_AFTER_BIRTH
-      );
+      console.log("disabilityBlocks", disabilityBlocks);
 
-      console.log("dueDate.toDateString()", dueDate.toDateString());
-      console.log("firstDayOfDisability", firstDayOfDisability.toDateString());
-      console.log(
-        "endOfStandardDisability",
-        endOfStandardDisability.toDateString()
-      );
+      disabilityPreBirthDisplayBlocks = disabilityBlocks.map(weekNum => (
+        <span className="disability-week">{weekNum + 1}</span>
+      ));
     }
-
-    //   <div>
-    //   First day of disability: {(dueDate.getDate() - 12).toDateString()}
-    // </div>
 
     return (
       <Fragment>
         {dueDate !== null && (
           <Fragment>
+            <div className="disability-prebirth-display-blocks">
+              {disabilityPreBirthDisplayBlocks}
+            </div>
             <div>
               First day of disability date:{" "}
               {firstDayOfDisability.toDateString()}
@@ -65,7 +49,7 @@ class LeaveDiagram extends Component {
               {endOfWageReplacement.toDateString()}
             </div>
             <div>
-              End of job protection date: {endOfJobDescription.toDateString()}
+              End of job protection date: {endOfJobProtection.toDateString()}
             </div>
           </Fragment>
         )}
