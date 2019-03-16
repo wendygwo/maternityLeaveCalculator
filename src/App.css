@@ -15,15 +15,72 @@
   font-size: calc(10px + 2vmin);
   color: white; */
 }
-.disability-prebirth-display-blocks {
+
+.leave-diagram-header {
+  text-align: center;
+}
+
+/* Lines between different part */
+.disability-prebirth-display-blocks,
+.disability-postbirth-display-blocks {
   display: inline-block;
   border-right: 2px dotted black;
 }
-.disability-week {
+
+/* Styling for entire diagram */
+.entire-diagram {
+  display: flex;
+}
+
+/* Week labels*/
+.disability-week,
+.disability-week-post-birth,
+.crfa-baby-bonding-weeks {
   display: inline-block;
-  width: 50px;
+  width: 40px;
   height: 20px;
-  background-color: pink;
+  background-color: #5b6170;
   color: white;
   margin: 2px;
+  text-align: center;
+}
+
+/* PDL label in diagram */
+.pdl-label,
+.crfa-label,
+.fmla-label,
+.fmla-label-concurrent-with-crfa {
+  text-align: center;
+  color: white;
+  margin: 2px;
+}
+.pdl-label {
+  background: #9dd9d2;
+}
+.crfa-label {
+  background: #00828c;
+}
+.fmla-label {
+  background: #61d1e1;
+}
+.fmla-label-concurrent-with-crfa {
+  /* width: calc(100% * attr(data-num-weeks-fmla-left number)); */
+  width: var(--fmla-custom-property);
+  background: #61d1e1;
+}
+/* Dates to show in diagram */
+.disability-prebirth-display-blocks::after,
+.disability-postbirth-display-blocks::after,
+.crfa-baby-bonding-display-blocks::after {
+  display: block;
+  text-align: right;
+}
+.disability-prebirth-display-blocks::after {
+  content: attr(data-due-date);
+}
+.disability-postbirth-display-blocks::after {
+  content: attr(data-end-of-disability-date);
+}
+.crfa-baby-bonding-display-blocks::after {
+  content: attr(data-end-of-job-protection-date);
 }

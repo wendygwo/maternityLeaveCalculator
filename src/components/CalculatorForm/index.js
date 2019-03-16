@@ -131,14 +131,21 @@ class CalculatorForm extends Component {
 
   getLeaveDiagram = () => {
     const dueDate = this.state.noBabyYetQ0;
-    const numPostBirthDisabilityWeeks =
+
+    const MAX_NUM_WEEKS_DISABILITY_BEFORE_DUE_DATE = 4;
+    const NUM_POST_BIRTH_DISABILITY_WEEKS =
       this.state.noBabyYetQ1 === "vaginal" ? 6 : 8;
+    const NUM_WEEKS_JOB_PROTECTION_AFTER_DISABILITY = 12;
+    const NUM_WEEKS_WAGE_REPLACEMENT_AFTER_BIRTH = 6;
 
     const STANDARD_NUM_DAYS_DISABILITY_AFTER_DUE_DATE =
-      7 * numPostBirthDisabilityWeeks;
-    const MAX_NUM_DAYS_DISABILITY_BEFORE_DUE_DATE = 7 * 4;
-    const NUM_DAYS_WAGE_REPLACEMENT_AFTER_BIRTH = 7 * 6;
-    const NUM_DAYS_JOB_PROTECTION_AFTER_BIRTH = 7 * 12;
+      7 * NUM_POST_BIRTH_DISABILITY_WEEKS;
+    const MAX_NUM_DAYS_DISABILITY_BEFORE_DUE_DATE =
+      7 * MAX_NUM_WEEKS_DISABILITY_BEFORE_DUE_DATE;
+    const NUM_DAYS_WAGE_REPLACEMENT_AFTER_BIRTH =
+      7 * NUM_WEEKS_WAGE_REPLACEMENT_AFTER_BIRTH;
+    const NUM_DAYS_JOB_PROTECTION_AFTER_DISABILITY =
+      7 * NUM_WEEKS_JOB_PROTECTION_AFTER_DISABILITY;
 
     let firstDayOfDisability,
       endOfStandardDisability,
@@ -175,7 +182,7 @@ class CalculatorForm extends Component {
 
       endOfJobProtection = new Date(endOfStandardDisability);
       endOfJobProtection.setDate(
-        endOfJobProtection.getDate() + NUM_DAYS_JOB_PROTECTION_AFTER_BIRTH
+        endOfJobProtection.getDate() + NUM_DAYS_JOB_PROTECTION_AFTER_DISABILITY
       );
 
       console.log("dueDate.toDateString()", dueDate.toDateString());
@@ -199,6 +206,10 @@ class CalculatorForm extends Component {
         endOfStandardDisability={endOfStandardDisability}
         endOfWageReplacement={endOfWageReplacement}
         endOfJobProtection={endOfJobProtection}
+        babyDeliveryMethod={this.state.noBabyYetQ1}
+        numWeeksJobProtectionAfterDisability={
+          NUM_WEEKS_JOB_PROTECTION_AFTER_DISABILITY
+        }
       />
     );
   };
