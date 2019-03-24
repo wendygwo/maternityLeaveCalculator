@@ -5,9 +5,21 @@ import ToggleQuestion from "./toggleQuestion";
 import DateQuestion from "./dateQuestion";
 import DropdownQuestion from "./dropdownQuestion";
 import LeaveDiagram from "./leaveDiagram";
+import { Button } from "react-bootstrap";
 
 const DEFAULT_TOGGLE_ANSWER = "no";
 const DEFAULT_DATE = new Date();
+
+const DELIVERY_METHODS = [
+  { text: "Vaginal", value: "vaginal" },
+  { text: "C-section", value: "c-section" }
+];
+const NUMBER_EMPLOYEES = [
+  { text: "50 employees", value: 50 },
+  { text: "20 employees", value: 20 },
+  { text: "5 employees", value: 5 },
+  { text: "1 employee", value: 1 }
+];
 
 class CalculatorForm extends Component {
   constructor(props) {
@@ -17,18 +29,31 @@ class CalculatorForm extends Component {
       disabilityQ0: null,
       disabilityQ1: null,
       noBabyYetQ0: null,
-      noBabyYetQ1: "vaginal",
+      noBabyYetQ1: DELIVERY_METHODS[0].value,
       babyBornQ0: null,
       babyBornQ1: null,
-      babyBornQ2: "vaginal",
+      babyBornQ2: DELIVERY_METHODS[0].value,
       babyBornQ3: null,
       employerQ0: null,
       employerQ1: null,
       employerQ2: null,
       employerQ3: null,
-      employerQ4: null
+      employerQ4: null,
+      employerQ5: NUMBER_EMPLOYEES[0].value,
+      showLeaveDiagram: false
     };
   }
+  allQuestionsAnswered = () => {
+    const { hadBabyYetQ0, noBabyYetQ0, employerQ0, employerQ1 } = this.state;
+    return hadBabyYetQ0 && noBabyYetQ0 && employerQ0 && employerQ1;
+  };
+  toggleShowDiagram = evt => {
+    console.log("evt", evt);
+    evt.preventDefault();
+    // evt.stopPropagation();
+    this.setState({ showLeaveDiagram: !this.state.showLeaveDiagram });
+  };
+
   onToggleClick = (value, name) => {
     // console.log("value", value);
     // console.log("name", name);
@@ -59,7 +84,12 @@ class CalculatorForm extends Component {
         <DropdownQuestion
           question={question.question}
           name={question.name}
-          deliveryMethod={this.state[question.name]}
+          selectedDropdownChoice={this.state[question.name]}
+          dropdownChoices={
+            question.name === "noBabyYetQ1"
+              ? DELIVERY_METHODS
+              : NUMBER_EMPLOYEES
+          }
           title={this.state[question.name]} // TODO - make this dynamic
           key={question.name}
           onClick={this.onDeliveryMethodClick}
@@ -125,6 +155,10 @@ class CalculatorForm extends Component {
         {employerRelatedQuestions.map(question =>
           this.questionDisplay(question)
         )}
+
+        <Button className="primary" onClick={this.toggleShowDiagram}>
+          Submit
+        </Button>
       </Fragment>
     );
   };
@@ -221,7 +255,12 @@ class CalculatorForm extends Component {
     const { firstQuestion } = allQuestions;
     return (
       <Fragment>
-        {this.getLeaveDiagram()}
+        {this.state.showLeaveDiagram && this.allQuestionsAnswered() && (
+          <div className="your-leave-summary">
+            <h2 className="your-leave-summary-header">Summary</h2>
+            {this.getLeaveDiagram()}
+          </div>
+        )}
         <form>
           <h3>Initial question</h3>
           {firstQuestion.map(question => this.questionDisplay(question))}

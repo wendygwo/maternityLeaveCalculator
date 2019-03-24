@@ -106,6 +106,12 @@ export const employerRelatedQuestions = [
     type: "toggle",
     name: "employerQ4",
     defaultAnswer: "no"
+  },
+  {
+    question: "My company has more than",
+    type: "dropdown",
+    name: "employerQ5",
+    defaultAnswer: 50
   }
 ];
 

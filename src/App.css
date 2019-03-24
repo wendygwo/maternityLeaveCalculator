@@ -16,6 +16,13 @@
   color: white; */
 }
 
+.your-leave-summary {
+  border: 4px #9dd9d2 solid;
+  border-radius: 25px;
+  height: 400px;
+  width: 1200px;
+}
+.your-leave-summary-header,
 .leave-diagram-header {
   text-align: center;
 }

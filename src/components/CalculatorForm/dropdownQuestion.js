@@ -3,27 +3,31 @@ import { DropdownButton, MenuItem } from "react-bootstrap";
 
 class DropdownQuestion extends Component {
   render() {
-    const { question, title, deliveryMethod, onClick, name } = this.props;
+    const {
+      question,
+      title,
+      selectedDropdownChoice,
+      onClick,
+      name,
+      dropdownChoices
+    } = this.props;
+
+    console.log("this.props", this.props);
 
     return (
       <div>
         {question}{" "}
-        <DropdownButton bsStyle="default" title={title} id={title}>
-          <MenuItem
-            eventKey="1"
-            active={deliveryMethod === "vaginal"}
-            onClick={() => onClick("vaginal", name)}
-          >
-            Vaginal
-          </MenuItem>
-          <MenuItem
-            eventKey="2"
-            active={deliveryMethod === "c-section"}
-            onClick={() => onClick("c-section", name)}
-          >
-            C-section
-          </MenuItem>
-        </DropdownButton>
+        <select bsStyle="default" title={title} id={title}>
+          {dropdownChoices.map((dropdownChoice, index) => (
+            <option
+              eventKey={index}
+              active={dropdownChoice.value === selectedDropdownChoice}
+              onClick={() => onClick(dropdownChoice.value, name)}
+            >
+              {dropdownChoice.text}
+            </option>
+          ))}
+        </select>
       </div>
     );
   }
